@@ -4,7 +4,6 @@ import psutil
 import os
 import sys
 import time
-import argparse
 from datetime import datetime
 from rich.console import Console
 from rich.table import Table
@@ -204,50 +203,7 @@ class PythonProcessMonitor:
 
 
 def main():
-    parser = argparse.ArgumentParser(
-        description='Monitor de procesos Python en tiempo real',
-        formatter_class=argparse.RawDescriptionHelpFormatter,
-        epilog='''
-Ejemplos de uso:
-  %(prog)s                              # Monitorear todos los procesos Python
-  %(prog)s -u yokonad                   # Filtrar por usuario 'yokonad'
-  %(prog)s -p "main.py"                 # Filtrar procesos que ejecutan 'main.py'
-  %(prog)s -u yokonad -p "server"       # Combinar filtros
-  %(prog)s -i 5                         # Actualizar cada 5 segundos
-        '''
-    )
-    
-    parser.add_argument(
-        '-u', '--user',
-        help='Filtrar procesos por nombre de usuario',
-        default=None
-    )
-    
-    parser.add_argument(
-        '-p', '--pattern',
-        help='Filtrar procesos por patrón en el nombre del archivo',
-        default=None
-    )
-    
-    parser.add_argument(
-        '-i', '--interval',
-        type=float,
-        help='Intervalo de actualización en segundos (por defecto: 1)',
-        default=1.0
-    )
-    
-    args = parser.parse_args()
-    
-    if args.interval < 0.5:
-        print("Error: El intervalo mínimo es 0.5 segundos")
-        sys.exit(1)
-    
-    monitor = PythonProcessMonitor(
-        user_filter=args.user,
-        name_pattern=args.pattern,
-        refresh_interval=args.interval
-    )
-    
+    monitor = PythonProcessMonitor()
     monitor.run()
 
 if __name__ == '__main__':
